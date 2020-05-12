@@ -1,23 +1,24 @@
 <template>
   <div id="app"> 
-    <NavBar></NavBar>   
     <b-container class="container mt-4">
-      <b-row>
-        <b-col cols="3"><b-img :src=this.logo fluid alt="Responsive image"></b-img></b-col>
-        <b-col><h1 class="title">Solicitud de Radicación de Proyectos</h1></b-col>
+      <b-row class="logo">
+        <b-col><b-img :src=this.logo fluid alt="Responsive image"></b-img></b-col>
       </b-row>
     </b-container>
     <b-container class="container">
-
+      <b-row>
+        <b-col>
+          <FormSolicitud></FormSolicitud>
+        </b-col>
+      </b-row>
     </b-container>
+    
     <!-- <HelloWorld msg="hola"></HelloWorld> -->
   </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar';
-// import HelloWorld from './components/HelloWorld.vue';
-// import MyComponent from './components/MyComponent.vue';
+import FormSolicitud from './components/FormSolicitud';
 
 export default {
   name: 'App',
@@ -25,6 +26,14 @@ export default {
     return {
       logo: '',
       titulo: '',
+      form: {
+          email: '',
+          name: '',
+          food: null,
+          checked: []
+        },
+      foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
+      show: true
     }
   },
   props: {
@@ -37,9 +46,7 @@ export default {
     this.getCuraduria(id);
   },
   components: {
-    NavBar,
-    // HelloWorld,
-    // MyComponent
+    FormSolicitud,
   },
   methods: {
     getCuraduria(idCuraduria){
@@ -50,6 +57,23 @@ export default {
           this.titulo = response.data.curador;
         }
       )
+    },
+    onSubmit(evt) {
+        evt.preventDefault()
+        alert(JSON.stringify(this.form))
+      },
+    onReset(evt) {
+      evt.preventDefault()
+      // Reset our form values
+      this.form.email = ''
+      this.form.name = ''
+      this.form.food = null
+      this.form.checked = []
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
     }
   }
 }
@@ -60,17 +84,9 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
-.title {
-  font-size: 1.7rem;
-  font-weight: 500;
-  text-align: left;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+.logo {
+  text-align: center;
 }
 </style>
