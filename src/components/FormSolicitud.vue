@@ -142,7 +142,7 @@
               <b-form-file
                 multiple 
                 v-model="form.anexos"
-                :state="Boolean(file)"
+                :state="Boolean(form.anexos)"
                 placeholder="Choose a file or drop it here..."
                 drop-placeholder="Drop file here..."
               ></b-form-file>
@@ -195,6 +195,9 @@ export default {
   components: {
   },
   methods: {
+    getObjetoLicencias(){
+
+    },
     onSubmit(evt) {
         evt.preventDefault()
         alert(JSON.stringify(this.form))

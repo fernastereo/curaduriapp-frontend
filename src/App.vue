@@ -18,9 +18,11 @@
 </template>
 
 <script>
+import axios from 'axios';
 import FormSolicitud from './components/FormSolicitud';
 
 export default {
+  
   name: 'App',
   data(){
     return {
@@ -50,10 +52,11 @@ export default {
   },
   methods: {
     getCuraduria(idCuraduria){
-      this.$http.get(`http://curaduriapp.test/api/curadurias/${idCuraduria}`)
+      axios
+        .get(`${this.$api_host}/api/curadurias/${idCuraduria}`)
         .then((response) => {
           console.log(response.data);
-          this.logo = 'http://curaduriapp.test/storage/' + response.data.logo;
+          this.logo = `${this.$api_host}/storage/` + response.data.logo;
           this.titulo = response.data.curador;
         }
       )
