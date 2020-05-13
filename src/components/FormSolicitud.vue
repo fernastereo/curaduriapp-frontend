@@ -54,7 +54,7 @@
             <b-col sm="4">
               <b-form-select
                 id="licencia_id"
-                v-model="form.licencia_id"
+                v-model="licencia_id"
                 :options="licencias"
                 required
                 size="sm"
@@ -148,9 +148,10 @@
               ></b-form-file>
             </b-col>
           </b-row>
-
-          <b-button type="submit" variant="primary">Submit</b-button>
-          <b-button type="reset" variant="danger">Reset</b-button>
+          <div class="d-flex flex-row-reverse mt-5">
+            <b-button type="reset" variant="danger">Cancelar</b-button>
+            <b-button type="submit" variant="primary" class="mr-5">Enviar</b-button>
+          </div>
         </b-form> 
       </div>
       <b-card class="mt-3" header="Form Data Result">
@@ -175,7 +176,6 @@ export default {
           objeto_id: null,
           licenciaanterior: '',
           vigencialicencia: '',
-          licencia_id: null,
           modalidad_id: null,
           solidentificacion : '',
           solnombre: '',
@@ -185,8 +185,8 @@ export default {
           anexos  : []
         },
       objetos: [{ text: '-- Seleccione --', value: null } ], //, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-      licencias: [],
-      modalidads: [],
+      licencias: [{ text: '-- Seleccione --', value: null } ],
+      modalidads: [{ text: '-- Seleccione --', value: null } ],
       show: true
     }
   },
@@ -194,6 +194,7 @@ export default {
   },
   mounted() {
     this.getObjetoLicencias();
+    this.getLicencias();
   },
   components: {
   },
@@ -205,6 +206,27 @@ export default {
           const objetos = response.data;
           objetos.forEach((objeto) => {
             this.objetos.push({ text: objeto.nombre, value: objeto.id });
+          });
+        })
+    },
+    getLicencias(){
+      axios
+        .get(`${this.$api_host}/api/licencias`)
+        .then((response) => {
+          const licencias = response.data;
+          licencias.forEach((licencia) => {
+            this.licencias.push({ text: licencia.nombre, value: licencia.id });
+          });
+        })
+    },
+    getModalidads(idLicencia){
+      this.modalidads = [{ text: '-- Seleccione --', value: null } ];
+      axios
+        .get(`${this.$api_host}/api/licencias/${idLicencia}/modalidads`)
+        .then((response) => {
+          const modalidads = response.data;
+          modalidads.forEach((modalidad) => {
+            this.modalidads.push({ text: modalidad.nombre, value: modalidad.id });
           });
         })
     },
@@ -224,6 +246,16 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+    }
+  },
+  computed: {
+    licencia_id: {
+      get() {
+        return console.log('GET');
+      },
+      set(value) {
+        return this.getModalidads(value);
+      }
     }
   }
 }
