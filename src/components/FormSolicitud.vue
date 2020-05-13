@@ -165,6 +165,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'App',
   data(){
@@ -182,7 +184,7 @@ export default {
           descripcion: '',
           anexos  : []
         },
-      objetos: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
+      objetos: [{ text: '-- Seleccione --', value: null } ], //, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       licencias: [],
       modalidads: [],
       show: true
@@ -191,12 +193,20 @@ export default {
   props: {
   },
   mounted() {
+    this.getObjetoLicencias();
   },
   components: {
   },
   methods: {
     getObjetoLicencias(){
-
+      axios
+        .get(`${this.$api_host}/api/objetolicencias`)
+        .then((response) => {
+          const objetos = response.data;
+          objetos.forEach((objeto) => {
+            this.objetos.push({ text: objeto.nombre, value: objeto.id });
+          });
+        })
     },
     onSubmit(evt) {
         evt.preventDefault()
