@@ -178,11 +178,11 @@ import axios from 'axios';
 import FileUploadComponent from './FileUploadComponent';
 
 export default {
-  name: 'App',
   data(){
     return {
       file: [],
       form: {
+          id: null,
           objeto_id: null,
           licenciaanterior: '',
           vigencialicencia: '',
@@ -201,10 +201,13 @@ export default {
     }
   },
   props: {
+    curaduria_id: String,
   },
   mounted() {
     this.getObjetoLicencias();
     this.getLicencias();
+    console.log(this.curaduria_id);
+    this.form.id = this.curaduria_id;
   },
   components: {
     FileUploadComponent,

@@ -8,12 +8,10 @@
     <b-container class="container">
       <b-row>
         <b-col>
-          <FormSolicitud></FormSolicitud>
+          <FormSolicitud :curaduria_id="curaduria_id"></FormSolicitud>
         </b-col>
       </b-row>
     </b-container>
-    
-    <!-- <HelloWorld msg="hola"></HelloWorld> -->
   </div>
 </template>
 
@@ -26,25 +24,18 @@ export default {
   name: 'App',
   data(){
     return {
+      curaduria_id: 0,
       logo: '',
-      titulo: '',
-      form: {
-          email: '',
-          name: '',
-          food: null,
-          checked: []
-        },
-      foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-      show: true
     }
   },
   props: {
   },
-  mounted() {
+  beforeMount(){
     const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    console.log(id);
-    this.getCuraduria(id);
+    this.curaduria_id = urlParams.get('id');
+  },
+  mounted() {
+    this.getCuraduria(this.curaduria_id);
   },
   components: {
     FormSolicitud,
@@ -56,27 +47,9 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.logo = `${this.$api_host}/storage/` + response.data.logo;
-          this.titulo = response.data.curador;
         }
       )
     },
-    onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-    onReset(evt) {
-      evt.preventDefault()
-      // Reset our form values
-      this.form.email = ''
-      this.form.name = ''
-      this.form.food = null
-      this.form.checked = []
-      // Trick to reset/clear native browser form validation state
-      this.show = false
-      this.$nextTick(() => {
-        this.show = true
-      })
-    }
   }
 }
 </script>
