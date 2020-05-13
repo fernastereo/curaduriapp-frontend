@@ -139,13 +139,16 @@
           </b-row>
           <b-row class="my-2">
             <b-col sm="12">
-              <b-form-file
+              <FileUploadComponent
+                v-on:selectedFiles="getSelectedFiles($event)"
+              ></FileUploadComponent>
+              <!-- <b-form-file
                 multiple 
-                v-model="form.anexos"
-                :state="Boolean(form.anexos)"
+                v-model="file"
+                :state="Boolean(file)"
                 placeholder="Choose a file or drop it here..."
                 drop-placeholder="Drop file here..."
-              ></b-form-file>
+              ></b-form-file> -->
             </b-col>
           </b-row>
           <div class="d-flex flex-row-reverse mt-5">
@@ -156,6 +159,11 @@
       </div>
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0">{{ form }}</pre>
+        <ul>
+          <li v-for="file in form.anexos" :key="file.index">
+            {{ file.name }}
+          </li>
+        </ul>
       </b-card>
       
       <template v-slot:footer>
@@ -167,11 +175,13 @@
 
 <script>
 import axios from 'axios';
+import FileUploadComponent from './FileUploadComponent';
 
 export default {
   name: 'App',
   data(){
     return {
+      file: [],
       form: {
           objeto_id: null,
           licenciaanterior: '',
@@ -182,7 +192,7 @@ export default {
           soltelefono: '',
           solemail: '',
           descripcion: '',
-          anexos  : []
+          anexos: []
         },
       objetos: [{ text: '-- Seleccione --', value: null } ], //, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       licencias: [{ text: '-- Seleccione --', value: null } ],
@@ -197,8 +207,12 @@ export default {
     this.getLicencias();
   },
   components: {
+    FileUploadComponent,
   },
   methods: {
+    getSelectedFiles(files) {
+      this.form.anexos = files;
+    },
     getObjetoLicencias(){
       axios
         .get(`${this.$api_host}/api/objetolicencias`)
