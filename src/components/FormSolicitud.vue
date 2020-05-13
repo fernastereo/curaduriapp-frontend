@@ -29,8 +29,7 @@
               <b-form-input
                 id="licenciaanterior"
                 v-model="form.licenciaanterior"
-                type="email"
-                required
+                type="text"
                 size="sm"
               ></b-form-input>
             </b-col>
@@ -41,8 +40,7 @@
               <b-form-input
                 id="vigencialicencia"
                 v-model="form.vigencialicencia"
-                type="text"
-                required
+                type="number"
                 size="sm"
               ></b-form-input>
             </b-col>
@@ -81,6 +79,7 @@
               <b-form-input
                 id="solidentificacion"
                 v-model="form.solidentificacion"
+                type="number"
                 required
                 size="sm"
               ></b-form-input>
@@ -92,6 +91,7 @@
               <b-form-input
                 id="solnombre"
                 v-model="form.solnombre"
+                type="text"
                 required
                 size="sm"
               ></b-form-input>
@@ -105,6 +105,7 @@
               <b-form-input
                 id="soltelefono"
                 v-model="form.soltelefono"
+                type="text"
                 required
                 size="sm"
               ></b-form-input>
@@ -142,13 +143,6 @@
               <FileUploadComponent
                 v-on:selectedFiles="getSelectedFiles($event)"
               ></FileUploadComponent>
-              <!-- <b-form-file
-                multiple 
-                v-model="file"
-                :state="Boolean(file)"
-                placeholder="Choose a file or drop it here..."
-                drop-placeholder="Drop file here..."
-              ></b-form-file> -->
             </b-col>
           </b-row>
           <div class="d-flex flex-row-reverse mt-5">
