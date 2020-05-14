@@ -44,8 +44,7 @@ export default {
     getCuraduria(idCuraduria){
       axios
         .get(`${this.$api_host}/api/curadurias/${idCuraduria}`)
-        .then((response) => {
-          console.log(response.data);
+        .then((response) => {          
           this.logo = `${this.$api_host}/storage/` + response.data.logo;
         }
       )

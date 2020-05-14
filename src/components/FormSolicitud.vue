@@ -151,14 +151,6 @@
           </div>
         </b-form> 
       </div>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ form }}</pre>
-        <ul>
-          <li v-for="anexo in anexos" :key="anexo.index">
-            {{ anexo.name }}
-          </li>
-        </ul>
-      </b-card>
       
       <template v-slot:footer>
         <em>Footer Slot</em>
@@ -199,7 +191,6 @@ export default {
   mounted() {
     this.getObjetoLicencias();
     this.getLicencias();
-    console.log(this.curaduria_id);
     this.form.curaduria_id = this.curaduria_id;
   },
   components: {
@@ -244,10 +235,10 @@ export default {
     },
     onSubmit(evt) {
         evt.preventDefault()
-        //Hasta ahora guarda los datos pero no recibe los archivos 
-        //y por consiguiente no hay nada para subir al bucket
+
+        //Cuando se requiera enviar datos con archivos para subir se debe utilizar esta forma:
+        //crear un FormData y enviar los datos junto con los archivos a través de el
         const formData = new FormData();
-        
         formData.append('curaduria_id', this.form.curaduria_id);
         formData.append('objetolicencia_id', this.form.objetolicencia_id);
         formData.append('licenciaanteriornumero', this.form.licenciaanteriornumero);
@@ -281,10 +272,17 @@ export default {
     onReset(evt) {
       evt.preventDefault()
       // Reset our form values
-      this.form.email = ''
-      this.form.name = ''
-      this.form.food = null
-      this.form.checked = []
+      this.form.objetolicencia_id= null;
+      this.form.licenciaanteriornumero= '';
+      this.form.licenciaanteriorvigencia= '';
+      this.form.modalidad_id= null;
+      this.form.solidentificacion= '';
+      this.form.solnombre= '';
+      this.form.soltelefono= '';
+      this.form.solemail= '';
+      this.form.descripcion= '';
+      this.anexos = [];
+      this.modalidads = [{ text: '-- Seleccione --', value: null } ];
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
@@ -295,7 +293,7 @@ export default {
   computed: {
     licencia_id: {
       get() {
-        return console.log('GET');
+        return console.log('');
       },
       set(value) {
         return this.getModalidads(value);
