@@ -11,35 +11,35 @@
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-row class="my-2" align-v="baseline">
             <b-col sm="2">
-              <label for="objeto_id" class="label">Objeto del Trámite:</label>
+              <label for="objetolicencia_id" class="label">Objeto del Trámite:</label>
             </b-col>
             <b-col sm="4">
               <b-form-select
-                id="objeto_id"
-                v-model="form.objeto_id"
+                id="objetolicencia_id"
+                v-model="form.objetolicencia_id"
                 :options="objetos"
                 required
                 size="sm"
               ></b-form-select>
             </b-col>
             <b-col sm="2">
-              <label for="licenciaanterior" class="label">Licencia Anterior:</label>
+              <label for="licenciaanteriornumero" class="label">Licencia Anterior:</label>
             </b-col>
             <b-col sm="1">
               <b-form-input
-                id="licenciaanterior"
-                v-model="form.licenciaanterior"
+                id="licenciaanteriornumero"
+                v-model="form.licenciaanteriornumero"
                 type="text"
                 size="sm"
               ></b-form-input>
             </b-col>
             <b-col sm="1">
-              <label for="vigencialicencia" class="label">Año:</label>
+              <label for="licenciaanteriorvigencia" class="label">Año:</label>
             </b-col>
             <b-col sm="1">
               <b-form-input
-                id="vigencialicencia"
-                v-model="form.vigencialicencia"
+                id="licenciaanteriorvigencia"
+                v-model="form.licenciaanteriorvigencia"
                 type="number"
                 size="sm"
               ></b-form-input>
@@ -79,7 +79,7 @@
               <b-form-input
                 id="solidentificacion"
                 v-model="form.solidentificacion"
-                type="number"
+                type="text"
                 required
                 size="sm"
               ></b-form-input>
@@ -154,8 +154,8 @@
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0">{{ form }}</pre>
         <ul>
-          <li v-for="file in form.anexos" :key="file.index">
-            {{ file.name }}
+          <li v-for="anexo in anexos" :key="anexo.index">
+            {{ anexo.name }}
           </li>
         </ul>
       </b-card>
@@ -174,21 +174,20 @@ import FileUploadComponent from './FileUploadComponent';
 export default {
   data(){
     return {
-      file: [],
       form: {
-          id: null,
-          objeto_id: null,
-          licenciaanterior: '',
-          vigencialicencia: '',
+          curaduria_id: null,
+          objetolicencia_id: null,
+          licenciaanteriornumero: '',
+          licenciaanteriorvigencia: '',
           modalidad_id: null,
           solidentificacion : '',
           solnombre: '',
           soltelefono: '',
           solemail: '',
           descripcion: '',
-          anexos: []
         },
-      objetos: [{ text: '-- Seleccione --', value: null } ], //, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
+      anexos: [],
+      objetos: [{ text: '-- Seleccione --', value: null } ],
       licencias: [{ text: '-- Seleccione --', value: null } ],
       modalidads: [{ text: '-- Seleccione --', value: null } ],
       show: true
@@ -201,14 +200,14 @@ export default {
     this.getObjetoLicencias();
     this.getLicencias();
     console.log(this.curaduria_id);
-    this.form.id = this.curaduria_id;
+    this.form.curaduria_id = this.curaduria_id;
   },
   components: {
     FileUploadComponent,
   },
   methods: {
     getSelectedFiles(files) {
-      this.form.anexos = files;
+      this.anexos = files;
     },
     getObjetoLicencias(){
       axios
@@ -243,7 +242,13 @@ export default {
     },
     onSubmit(evt) {
         evt.preventDefault()
-        alert(JSON.stringify(this.form))
+        //Hasta ahora guarda los datos pero no recibe los archivos 
+        //y por consiguiente no hay nada para subir al bucket
+        axios
+          .post(`${this.$api_host}/api/solicituds`, this.form)
+          .then((response) => {
+            console.log(response);
+          });
       },
     onReset(evt) {
       evt.preventDefault()
