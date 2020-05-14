@@ -208,6 +208,8 @@ export default {
   methods: {
     getSelectedFiles(files) {
       this.anexos = files;
+      // console.log('Rcibido en el form:');
+      // console.log(this.anexos);
     },
     getObjetoLicencias(){
       axios
@@ -244,9 +246,35 @@ export default {
         evt.preventDefault()
         //Hasta ahora guarda los datos pero no recibe los archivos 
         //y por consiguiente no hay nada para subir al bucket
+        const formData = new FormData();
+        
+        formData.append('curaduria_id', this.form.curaduria_id);
+        formData.append('objetolicencia_id', this.form.objetolicencia_id);
+        formData.append('licenciaanteriornumero', this.form.licenciaanteriornumero);
+        formData.append('licenciaanteriorvigencia', this.form.licenciaanteriorvigencia);
+        formData.append('modalidad_id', this.form.modalidad_id);
+        formData.append('solidentificacion', this.form.solidentificacion);
+        formData.append('solnombre', this.form.solnombre);
+        formData.append('soltelefono', this.form.soltelefono);
+        formData.append('solemail', this.form.solemail);
+        formData.append('descripcion', this.form.descripcion);
+        
+        Array
+          .from(Array(this.anexos.length).keys())
+          .map(x => {
+            formData.append('anexos[]', this.anexos[x]);
+          });
+        
+        // Para verificar si el formData si tiene algo
+        // for (var key of formData.entries()) {
+        //   console.log(key[0] + ', ' + key[1])
+        // }
+
         axios
-          .post(`${this.$api_host}/api/solicituds`, this.form)
+          .post(`${this.$api_host}/api/solicituds`, formData)
           .then((response) => {
+            console.log(response);
+          }).catch((response) => {
             console.log(response);
           });
       },
