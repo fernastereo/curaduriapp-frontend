@@ -153,7 +153,7 @@
       </div>
       
       <template v-slot:footer>
-        <em>Footer Slot</em>
+        <small>Copyright CuraduriAPP® v. 1.0.0</small>
       </template>
     </b-card>
   </div>
