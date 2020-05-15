@@ -264,9 +264,12 @@ export default {
         axios
           .post(`${this.$api_host}/api/solicituds`, formData)
           .then((response) => {
-            console.log(response);
-          }).catch((response) => {
-            console.log(response);
+            if(response.statusText == 'Created'){
+              this.$alert('Se ha enviado un mensaje de confirmación a su correo electrónico', 'Su información ha sido enviada', 'success');
+              this.onReset(evt);
+            }
+          }).catch(() => {
+            this.$alert('Ha ocurrido un error al enviar su información, por favor intente de nuevo', 'Error', 'error');
           });
       },
     onReset(evt) {
