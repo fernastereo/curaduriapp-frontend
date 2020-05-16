@@ -199,8 +199,6 @@ export default {
   methods: {
     getSelectedFiles(files) {
       this.anexos = files;
-      // console.log('Rcibido en el form:');
-      // console.log(this.anexos);
     },
     getObjetoLicencias(){
       axios
