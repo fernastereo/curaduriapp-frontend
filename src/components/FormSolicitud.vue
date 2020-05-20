@@ -143,6 +143,7 @@
               <FileUploadComponent
                 v-on:selectedFiles="getSelectedFiles($event)"
               ></FileUploadComponent>
+              <progress max="100" :value.prop="uploadPercentage"></progress>
             </b-col>
           </b-row>
           <div class="d-flex flex-row-reverse mt-5">
@@ -179,6 +180,7 @@ export default {
           descripcion: '',
         },
       anexos: [],
+      uploadPercentage: 0,
       objetos: [{ text: '-- Seleccione --', value: null } ],
       licencias: [{ text: '-- Seleccione --', value: null } ],
       modalidads: [{ text: '-- Seleccione --', value: null } ],
@@ -237,6 +239,7 @@ export default {
         //Cuando se requiera enviar datos con archivos para subir se debe utilizar esta forma:
         //crear un FormData y enviar los datos junto con los archivos a través de el
         const formData = new FormData();
+        console.log('------------------------------');
         formData.append('curaduria_id', this.form.curaduria_id);
         formData.append('objetolicencia_id', this.form.objetolicencia_id);
         formData.append('licenciaanteriornumero', this.form.licenciaanteriornumero);
@@ -248,20 +251,34 @@ export default {
         formData.append('solemail', this.form.solemail);
         formData.append('descripcion', this.form.descripcion);
         
-        Array
-          .from(Array(this.anexos.length).keys())
-          .map(x => {
-            formData.append('anexos[]', this.anexos[x]);
-          });
+        // Array
+        //   .from(Array(this.anexos.length).keys())
+        //   .map(x => {
+        //     formData.append('anexos[]', this.anexos[x]);
+        //   });
         
+        for( var i = 0; i < this.anexos.length; i++ ){
+          let anexo = this.anexos[i];
+          formData.append('anexos[' + i + ']', anexo);
+        }
         // Para verificar si el formData si tiene algo
-        // for (var key of formData.entries()) {
-        //   console.log(key[0] + ', ' + key[1])
-        // }
+        for (var key of formData.entries()) {
+          console.log(key[0] + ', ' + key[1])
+        }
 
         axios
-          .post(`${this.$api_host}/api/solicituds`, formData)
-          .then((response) => {
+          .post(`${this.$api_host}/api/solicituds`, formData,
+          {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: function(progressEvent) {
+              this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ));
+              console.log(this.uploadPercentage);
+            }.bind(this)
+          }
+          ).then((response) => {
+            // console.log(response.data);
             if(response.statusText == 'Created'){
               this.$alert('Se ha enviado un mensaje de confirmación a su correo electrónico', 'Su información ha sido enviada', 'success');
               this.onReset(evt);
