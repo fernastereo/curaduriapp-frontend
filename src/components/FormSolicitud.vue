@@ -148,8 +148,8 @@
             </b-col>
           </b-row>
           <div class="d-flex flex-row-reverse mt-5">
-            <b-button type="reset" variant="danger">Cancelar</b-button>
-            <b-button type="submit" variant="primary" class="mr-5">Enviar</b-button>
+            <b-button type="reset" variant="danger" :disabled="isBusy">Cancelar</b-button>
+            <b-button type="submit" variant="primary" :disabled="isBusy" class="mr-5">Enviar</b-button>
           </div>
         </b-form> 
       </div>
@@ -186,7 +186,7 @@ export default {
       licencias: [{ text: '-- Seleccione --', value: null } ],
       modalidads: [{ text: '-- Seleccione --', value: null } ],
       show: true,
-      isBusy: true
+      isBusy: false
     }
   },
   props: {
@@ -258,15 +258,15 @@ export default {
         //   .map(x => {
         //     formData.append('anexos[]', this.anexos[x]);
         //   });
-        
+        console.log(this.anexos.length);
         for( var i = 0; i < this.anexos.length; i++ ){
           let anexo = this.anexos[i];
           formData.append('anexos[' + i + ']', anexo);
         }
-        // // Para verificar si el formData si tiene algo
-        // for (var key of formData.entries()) {
-        //   console.log(key[0] + ', ' + key[1])
-        // }
+        // Para verificar si el formData si tiene algo
+        for (var key of formData.entries()) {
+          console.log(key[0] + ', ' + key[1])
+        }
 
         axios
           .post(`${this.$api_host}/api/solicituds`, formData
@@ -280,7 +280,8 @@ export default {
           //   }.bind(this)
           // }
           ).then((response) => {
-            // console.log(response);
+            console.log(response);
+            this.isBusy = false;
             if(response.statusText == 'Created'){
               this.$alert('Se ha enviado un mensaje de confirmación a su correo electrónico', 'Su información ha sido enviada', 'success');
               this.isBusy = false;

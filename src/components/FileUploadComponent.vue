@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="custom-file">
-      <input type="file" class="custom-file-input" id="files" ref="files" multiple
+      <input type="file" class="custom-file-input" id="files" ref="files" multiple :disabled="isBusy"
               v-on:change="handleFileUploads()">
       <label class="custom-file-label" for="customFile">Seleccione los anexos a enviar...</label>
     </div>

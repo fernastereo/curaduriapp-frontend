@@ -1,11 +1,11 @@
 <template>
   <div id="app"> 
-    <b-container class="container mt-4">
+    <b-container class="container mt-2">
       <b-row class="logo">
         <b-col><b-img :src=this.logo fluid alt="Responsive image"></b-img></b-col>
       </b-row>
     </b-container>
-    <b-container class="container">
+    <b-container class="container pt-1">
       <b-row>
         <b-col>
           <FormSolicitud :curaduria_id="curaduria_id"></FormSolicitud>
@@ -59,6 +59,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  /* background-image: url('http://curaduriapp.test/storage/1ca.jpg');
+  background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+  background-position: center center; */
 }
 .logo {
   text-align: center;
