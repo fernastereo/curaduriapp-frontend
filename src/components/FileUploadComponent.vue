@@ -1,35 +1,13 @@
 <template>
   <div>
     <div class="custom-file">
-      <input type="file" class="custom-file-input " id="files" ref="files" 
-              multiple v-on:change="handleFileUploads()">
+      <input type="file" class="custom-file-input" id="files" ref="files" multiple
+              v-on:change="handleFileUploads()">
       <label class="custom-file-label" for="customFile">Seleccione los anexos a enviar...</label>
     </div>
-    <div v-if="files.length > 0" class="mt-4 label">
-      <!-- <ul>
-      <span v-if="files.length > 0">Archivos Seleccionados</span>
-        <li v-for="file in files" :key="file.index">
-          {{ file.name }}
-        </li>
-      </ul> -->
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">File</th>
-            <th scope="col">Size</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="file in files" :key="file.index">
-            <th scope="row">{{ file.index }}</th>
-            <td>{{ file.name }}</td>
-            <td>{{ file.size }}</td>
-            <td><progress max="100" :value.prop="uploadPercentage"></progress></td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="items.length > 0" class="mt-4 label">
+      <b-table striped hover :busy="isBusy" :items="items" :fields="fields" fixed>
+      </b-table>
     </div>
   </div>
 </template>
@@ -39,20 +17,50 @@ export default {
   data(){
     return {
       files: [],
+      items: [],
+      fields: [
+          { key: 'name', label: 'Archivo' },
+          { key: 'size', label: 'Tamaño' },
+        ],
+      folder: '',
     }
   },
   props: {
+    curaduria_id: String,
+    isBusy: Boolean
   },
   mounted() {
-    
+    this.folder = this.setFolderId();
   },
   components: {
   },
   methods: {
     handleFileUploads(){
       this.files = this.$refs.files.files;
+      Array
+          .from(Array(this.files.length).keys())
+          .map(x => {
+            let itemFile = {
+              'name': this.files[x].name,
+              'size': `${this.roundToTwo(this.files[x].size / 1000000)}M`,
+            }
+            
+            this.items.push(itemFile);
+          });
       this.$emit('selectedFiles', this.files);
     },
+    setFolderId(){
+      let s4 = () => {
+          return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+      }
+      //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    },
+    roundToTwo(num) {    
+      return +(Math.round(num + "e+2")  + "e-2");
+    }
   },
 }
 </script>

@@ -140,7 +140,9 @@
           </b-row>
           <b-row class="my-2">
             <b-col sm="12">
-              <FileUploadComponent
+              <FileUploadComponent 
+                :curaduria_id="curaduria_id"
+                :isBusy="isBusy"
                 v-on:selectedFiles="getSelectedFiles($event)"
               ></FileUploadComponent>
             </b-col>
@@ -183,7 +185,8 @@ export default {
       objetos: [{ text: '-- Seleccione --', value: null } ],
       licencias: [{ text: '-- Seleccione --', value: null } ],
       modalidads: [{ text: '-- Seleccione --', value: null } ],
-      show: true
+      show: true,
+      isBusy: true
     }
   },
   props: {
@@ -234,7 +237,7 @@ export default {
     },
     onSubmit(evt) {
         evt.preventDefault()
-
+        this.isBusy = true;
         //Cuando se requiera enviar datos con archivos para subir se debe utilizar esta forma:
         //crear un FormData y enviar los datos junto con los archivos a través de el
         const formData = new FormData();
@@ -277,13 +280,15 @@ export default {
           //   }.bind(this)
           // }
           ).then((response) => {
-            // console.log(response.data);
+            // console.log(response);
             if(response.statusText == 'Created'){
               this.$alert('Se ha enviado un mensaje de confirmación a su correo electrónico', 'Su información ha sido enviada', 'success');
+              this.isBusy = false;
               this.onReset(evt);
             }
           }).catch(() => {
             this.$alert('Ha ocurrido un error al enviar su información, por favor intente de nuevo', 'Error', 'error');
+            this.isBusy = false;
           });
       },
     onReset(evt) {
@@ -305,7 +310,7 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
-    }
+    },
   },
   computed: {
     licencia_id: {
