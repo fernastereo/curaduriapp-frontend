@@ -6,12 +6,15 @@
       <label class="custom-file-label" for="customFile">Seleccione los anexos a enviar...</label>
     </div>
     <div v-if="items.length > 0" class="mt-4 label">
-      <b-table small striped hover :busy="isBusy" :items="items" :fields="fields" fixed>
+      <b-table small striped hover :busy="isBusy" :items="items" :fields="fields" responsive>
+        <template v-slot:cell(name)="data">
+          <span v-html="data.value"></span>
+        </template>
         <template v-slot:cell(progress)="row">
-          <b-progress :value="row.item.progress" :max="100" show-progress animated></b-progress>
+          <b-progress :value="row.item.progress" :max="100" show-progress></b-progress>
         </template>
         <template v-slot:cell(actions)="row">
-          <b-button size="sm" variant="danger" @click="deletefile(row.item, row.index)" class="mr-1" :disabled="row.item.deleteDisabled">
+          <b-button size="sm" variant="danger" @click="deletefile(row.item, row.index)" class="mr-1">
             <b-icon-x-square></b-icon-x-square>
           </b-button>
         </template>
@@ -28,11 +31,11 @@ export default {
       files: [],
       items: [],
       fields: [
-          { key: 'name', label: 'Archivo' },
-          { key: 'size', label: 'Tamaño' },
-          { key: 'progress', label: '' },
-          { key: 'actions', label: '' },
-          { key: 'status', label: '' },
+          { key: 'name', label: 'Archivo', 'class': 'file-column' },
+          { key: 'size', label: 'Tamaño', 'class': 'size-column' },
+          { key: 'progress', label: '', 'class': 'progress-column' },
+          { key: 'status', label: '', 'class': 'status-column' },
+          { key: 'actions', label: '', 'class': 'action-column' },
         ],
       folder: '',
       isBusy: false,
@@ -60,7 +63,6 @@ export default {
             'status': 'Cargando...',
             'loaded': false,
             'path': '',
-            'deleteDisabled': false
           }
           this.items.push(itemFile);
 
@@ -77,11 +79,11 @@ export default {
 
           axios.post(`${this.$api_host}/api/solicituds/upload`, formData, config)
             .then(res => {
+              itemFile.name = '<strong><span style="color:blue">' + this.files[x].name + '</span></strong>';
               itemFile.progress = 100;
               itemFile.status = 'Cargado';
               itemFile.loaded = true;
               itemFile.path = res.data.path;
-              itemFile.deleteDisabled = true;
               console.log(res);
               this.isBusy = false;
             })
@@ -115,5 +117,20 @@ export default {
 <style>
 .label {
   font-size: 0.9em;
+}
+.file-column{
+  max-width: 180px;
+}
+.size-column{
+  max-width: 30px;
+}
+.progress-column{
+  max-width: 60px;
+}
+.action-column{
+  max-width: 15px;
+}
+.status-column{
+  max-width: 25px;
 }
 </style>
