@@ -142,7 +142,6 @@
             <b-col sm="12">
               <FileUploadComponent 
                 :curaduria_id="curaduria_id"
-                :isBusy="isBusy"
                 v-on:selectedFiles="getSelectedFiles($event)"
               ></FileUploadComponent>
             </b-col>
@@ -278,6 +277,11 @@ export default {
           //     this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ));
           //     console.log(this.uploadPercentage);
           //   }.bind(this)
+              // module.exports = {
+              //   devServer: {
+              //     host: 'localhost'
+              //   }
+              // };
           // }
           ).then((response) => {
             console.log(response);
