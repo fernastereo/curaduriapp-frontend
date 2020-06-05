@@ -66,6 +66,7 @@
                 id="modalidad_id"
                 v-model="form.modalidad_id"
                 :options="modalidads"
+                :disabled="modalidadDisabled"
                 required
                 size="sm"
               ></b-form-select>
@@ -185,7 +186,8 @@ export default {
       licencias: [{ text: '-- Seleccione --', value: null } ],
       modalidads: [{ text: '-- Seleccione --', value: null } ],
       show: true,
-      isBusy: false
+      isBusy: false,
+      modalidadDisabled: true
     }
   },
   props: {
@@ -202,6 +204,7 @@ export default {
   methods: {
     getSelectedFiles(files) {
       this.anexos = files;
+      console.log(this.anexos);
     },
     getObjetoLicencias(){
       axios
@@ -224,6 +227,7 @@ export default {
         })
     },
     getModalidads(idLicencia){
+      this.modalidadDisabled = true;
       this.modalidads = [{ text: '-- Seleccione --', value: null } ];
       axios
         .get(`${this.$api_host}/api/licencias/${idLicencia}/modalidads`)
@@ -232,6 +236,7 @@ export default {
           modalidads.forEach((modalidad) => {
             this.modalidads.push({ text: modalidad.nombre, value: modalidad.id });
           });
+          this.modalidadDisabled = false;
         })
     },
     onSubmit(evt) {
@@ -239,36 +244,50 @@ export default {
         this.isBusy = true;
         //Cuando se requiera enviar datos con archivos para subir se debe utilizar esta forma:
         //crear un FormData y enviar los datos junto con los archivos a través de el
-        const formData = new FormData();
-        // console.log('------------------------------');
-        formData.append('curaduria_id', this.form.curaduria_id);
-        formData.append('objetolicencia_id', this.form.objetolicencia_id);
-        formData.append('licenciaanteriornumero', this.form.licenciaanteriornumero);
-        formData.append('licenciaanteriorvigencia', this.form.licenciaanteriorvigencia);
-        formData.append('modalidad_id', this.form.modalidad_id);
-        formData.append('solidentificacion', this.form.solidentificacion);
-        formData.append('solnombre', this.form.solnombre);
-        formData.append('soltelefono', this.form.soltelefono);
-        formData.append('solemail', this.form.solemail);
-        formData.append('descripcion', this.form.descripcion);
+        // const formData = new FormData();
+        // // console.log('------------------------------');
+        // formData.append('curaduria_id', this.form.curaduria_id);
+        // formData.append('objetolicencia_id', this.form.objetolicencia_id);
+        // formData.append('licenciaanteriornumero', this.form.licenciaanteriornumero);
+        // formData.append('licenciaanteriorvigencia', this.form.licenciaanteriorvigencia);
+        // formData.append('modalidad_id', this.form.modalidad_id);
+        // formData.append('solidentificacion', this.form.solidentificacion);
+        // formData.append('solnombre', this.form.solnombre);
+        // formData.append('soltelefono', this.form.soltelefono);
+        // formData.append('solemail', this.form.solemail);
+        // formData.append('descripcion', this.form.descripcion);
         
-        // Array
-        //   .from(Array(this.anexos.length).keys())
-        //   .map(x => {
-        //     formData.append('anexos[]', this.anexos[x]);
-        //   });
-        console.log(this.anexos.length);
-        for( var i = 0; i < this.anexos.length; i++ ){
-          let anexo = this.anexos[i];
-          formData.append('anexos[' + i + ']', anexo);
-        }
-        // Para verificar si el formData si tiene algo
-        for (var key of formData.entries()) {
-          console.log(key[0] + ', ' + key[1])
-        }
+        // // Array
+        // //   .from(Array(this.anexos.length).keys())
+        // //   .map(x => {
+        // //     formData.append('anexos[]', this.anexos[x]);
+        // //   });
+        // console.log(this.anexos.length);
+        // for( var i = 0; i < this.anexos.length; i++ ){
+        //   let anexo = this.anexos[i];
+        //   formData.append('anexos[' + i + ']', anexo);
+        // }
+        // // Para verificar si el formData si tiene algo
+        // for (var key of formData.entries()) {
+        //   console.log(key[0] + ', ' + key[1])
+        // }
 
+        const data = {
+            'curaduria_id': this.form.curaduria_id,
+            'objetolicencia_id': this.form.objetolicencia_id,
+            'licenciaanteriornumero': this.form.licenciaanteriornumero,
+            'licenciaanteriorvigencia': this.form.licenciaanteriorvigencia,
+            'modalidad_id': this.form.modalidad_id,
+            'solidentificacion': this.form.solidentificacion,
+            'solnombre': this.form.solnombre,
+            'soltelefono': this.form.soltelefono,
+            'solemail': this.form.solemail,
+            'descripcion': this.form.descripcion,
+            'anexos': this.anexos,
+        };
+        console.log(data);
         axios
-          .post(`${this.$api_host}/api/solicituds`, formData
+          .post(`${this.$api_host}/api/solicituds`, data
           // {
           //   headers: {
           //       'Content-Type': 'multipart/form-data'

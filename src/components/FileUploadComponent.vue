@@ -93,7 +93,7 @@ export default {
               console.log(err);
             })
         });
-      // this.$emit('selectedFiles', this.files);
+        this.$emit('selectedFiles', this.items);
     },
     setFolderId(){
       let s4 = () => {
