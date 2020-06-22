@@ -14,7 +14,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueSimpleAlert);
 // Vue.prototype.$axios = axios;
-Vue.prototype.$api_host = 'http://curaduriapp.test';
+Vue.prototype.$api_host = 'http://54.236.48.221';
 
 const routes = [];
 

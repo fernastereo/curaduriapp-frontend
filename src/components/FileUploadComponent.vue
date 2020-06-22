@@ -69,7 +69,7 @@ export default {
           const config = {
             onUploadProgress: function(progressEvent) {
               itemFile.progress = Math.round((progressEvent.loaded * 90) / progressEvent.total)
-              console.log(itemFile.progress)
+              //console.log(itemFile.progress)
             }
           }
           let formData = new FormData();
@@ -77,17 +77,17 @@ export default {
           formData.append('folder', this.folder);
           formData.append('id', this.curaduria_id);
 
-          axios.post(`${this.$api_host}/api/solicituds/upload`, formData, config)
+          axios.post(`${this.$api_host}/api/solicitudsfiles`, formData, config)
             .then(res => {
               itemFile.name = '<strong><span style="color:blue">' + this.files[x].name + '</span></strong>';
               itemFile.progress = 100;
               itemFile.status = 'Cargado';
               itemFile.loaded = true;
               itemFile.path = res.data.path;
-              console.log(res);
+              // console.log(res);
               this.isBusy = false;
             })
-            .catch(err => {
+            .catch(err => {              
               itemFile.status = 'Error al cargar';
               this.isBusy = false;
               console.log(err);
