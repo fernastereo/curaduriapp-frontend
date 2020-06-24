@@ -204,7 +204,7 @@ export default {
   methods: {
     getSelectedFiles(files) {
       this.anexos = files;
-      console.log(this.anexos);
+      // console.log(this.anexos);
     },
     getObjetoLicencias(){
       axios
@@ -285,7 +285,7 @@ export default {
             'descripcion': this.form.descripcion,
             'anexos': this.anexos,
         };
-        console.log(data);
+        // console.log(data);
         axios
           .post(`${this.$api_host}/api/solicituds`, data
           // {
@@ -303,7 +303,7 @@ export default {
               // };
           // }
           ).then((response) => {
-            console.log(response);
+            // console.log(response);
             this.isBusy = false;
             if(response.statusText == 'Created'){
               this.$alert('Se ha enviado un mensaje de confirmación a su correo electrónico', 'Su información ha sido enviada', 'success');
