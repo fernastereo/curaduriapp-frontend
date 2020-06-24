@@ -3,7 +3,7 @@
     
     <b-card title="Solicitud de Radicación de Proyectos" header-tag="header" footer-tag="footer">
       <template v-slot:header>
-        <span class="float-right">Descargue aqui el <b-link href="#foo">Formulario Unico de Radicación</b-link></span>
+        <span class="float-right">Descargue aqui el <b-link href="https://web-curadurias.s3-us-west-1.amazonaws.com/2bq/pdf/fun.pdf">Formulario Unico de Radicación</b-link></span>
       </template>
         
       <div>
