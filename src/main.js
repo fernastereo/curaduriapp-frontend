@@ -14,7 +14,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueSimpleAlert);
 // Vue.prototype.$axios = axios;
-Vue.prototype.$api_host = 'https://54.162.42.95';
+Vue.prototype.$api_host = 'http://54.162.42.95';
 
 const routes = [];
 
