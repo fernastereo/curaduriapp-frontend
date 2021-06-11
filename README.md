@@ -6,6 +6,8 @@ Live demo: http://54.215.27.25/?id=1#/
 
 Backend API: https://github.com/fernastereo/curaduriapp
 
+![alt text](https://github.com/fernastereo/curaduriapp-frontend/blob/master/public/curaduriapp-frontend.png?raw=true)
+
 ## Project setup
 ```
 npm install
