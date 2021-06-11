@@ -1,5 +1,7 @@
 # curaduriapp-frontend
 
+Frontend of tool for receiving request of building permissions on CU2BQ
+
 ## Project setup
 ```
 npm install
